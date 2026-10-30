@@ -37,7 +37,6 @@ assets/js/landing.js           랜딩 UI, 예매 플로우
 assets/js/dashboard.js         지표 렌더링, 차트, 관리 액션
 supabase/migrations/0001_init.sql   스키마, RPC, 뷰, 권한
 scripts/seed-demo.mjs          데모 데이터 CLI
-.github/workflows/deploy.yml   GitHub Pages 배포
 ```
 
 ## 로컬 실행
@@ -163,11 +162,13 @@ gh auth login
 gh repo create pnu-halloween --public --source=. --remote=origin --push
 ```
 
-3. 저장소 Settings → Pages → Build and deployment → Source를 `GitHub Actions`로 설정
+3. 저장소 Settings → Pages → Build and deployment → Source를 `Deploy from a branch`로 설정하고 `main` / `(root)`를 선택
 
-4. `main` 브랜치에 푸시하면 `.github/workflows/deploy.yml`이 자동 배포합니다.
+4. `main` 브랜치에 푸시하면 Pages가 자동으로 다시 빌드합니다.
 
 모든 경로가 상대 경로이므로 `https://<계정>.github.io/<저장소>/` 하위 경로에서도 동작합니다.
+
+> 참고: `workflow` 스코프가 없는 토큰으로는 `.github/workflows/*` 파일을 푸시할 수 없어 Actions 대신 브랜치 배포를 사용합니다. Actions 배포로 바꾸려면 `gh auth refresh -s workflow` 후 워크플로 파일을 추가하세요.
 
 ## 보안 메모
 
