@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>운영진 대시보드 · PNU HALLOWEEN NIGHT 2026</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#07040d" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0612'/%3E%3Ccircle cx='32' cy='33' r='17' fill='%23ff8a3d'/%3E%3Cpath d='M24 30l5 4-6 2zM40 30l-5 4 6 2z' fill='%230b0612'/%3E%3Cpath d='M23 40c5 5 13 5 18 0' stroke='%230b0612' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/dashboard.css" />
+  </head>
+  <body class="dash-body">
+    <div class="noise" aria-hidden="true"></div>
+
+    <section class="auth-gate" id="auth-gate">
+      <div class="auth-card">
+        <a class="auth-brand" href="index.html">
+          <span class="auth-mark">
+            <svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" /></svg>
+          </span>
+          <span>PNU <em>HALLOWEEN</em></span>
+        </a>
+        <span class="kicker">STAFF ONLY</span>
+        <h1>운영진 대시보드</h1>
+        <p>퍼널 전환율과 버튼 클릭, 매출 지표를 확인하세요.<br />운영진 비밀번호가 필요합니다.</p>
+        <form id="auth-form" autocomplete="off">
+          <label class="sr-only" for="passcode">운영진 비밀번호</label>
+          <div class="auth-field">
+            <input id="passcode" type="password" name="passcode" placeholder="비밀번호 입력" autocomplete="current-password" required />
+            <button type="submit" class="btn btn-primary" id="auth-submit">입장</button>
+          </div>
+          <p class="auth-error" id="auth-error" role="alert"></p>
+        </form>
+        <p class="auth-note">
+          <svg viewBox="0 0 24 24" class="inline-icon"><path d="M12 3 5 6v5.5c0 4.4 3 7.6 7 9.5 4-1.9 7-5.1 7-9.5V6l-7-3Z" /></svg>
+          데모용 페이지입니다. 비밀번호는 README에서 확인할 수 있습니다.
+        </p>
+        <a class="auth-back" href="index.html">랜딩 페이지로 돌아가기</a>
+      </div>
+    </section>
+
+    <div class="dash" id="dashboard" hidden>
+      <header class="dash-header">
+        <div class="dash-header-inner">
+          <div class="dash-brand">
+            <a class="dash-logo" href="index.html" aria-label="랜딩 페이지로">
+              <svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" /></svg>
+            </a>
+            <div>
+              <span class="dash-kicker">PNU HALLOWEEN NIGHT 2026</span>
+              <strong>그로스 대시보드</strong>
+            </div>
+          </div>
+          <div class="dash-tools">
+            <span class="live-pill"><i></i><span id="live-sessions">0</span>명 실시간</span>
+            <span class="refresh-note" id="refresh-note">30초 자동 갱신</span>
+            <button class="icon-btn" type="button" id="refresh-btn" aria-label="새로고침" title="새로고침">
+              <svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5" /></svg>
+            </button>
+            <button class="btn btn-ghost btn-sm" type="button" id="logout-btn">나가기</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="dash-main">
+        <div class="dash-titlebar">
+          <div>
+            <span class="kicker">ANALYTICS</span>
+            <h1>이벤트 퍼널 &amp; 매출</h1>
+            <p class="dash-sub">10.31 FRI 18:00 · 부산대학교 대운동장</p>
+          </div>
+          <div class="range-tabs" role="tablist" aria-label="조회 기간">
+            <button type="button" data-days="1" role="tab">오늘</button>
+            <button type="button" data-days="7" class="is-active" role="tab">7일</button>
+            <button type="button" data-days="30" role="tab">30일</button>
+          </div>
+        </div>
+
+        <div class="status-line">
+          <span>마지막 갱신 <strong id="last-updated">-</strong></span>
+          <span class="dot-sep"></span>
+          <span id="range-label">최근 7일</span>
+          <span class="dot-sep"></span>
+          <span id="early-stock-note">얼리버드 확인 중</span>
+        </div>
+
+        <div class="demo-banner" id="demo-banner" hidden>
+          <div>
+            <strong>데모 데이터가 포함되어 있습니다</strong>
+            <span id="demo-count">-</span>
+          </div>
+          <div class="demo-actions">
+            <button class="btn btn-ghost btn-sm" type="button" id="seed-demo">데모 데이터 생성</button>
+            <button class="btn btn-ghost btn-sm danger" type="button" id="reset-demo">데모 데이터 삭제</button>
+          </div>
+        </div>
+
+        <div class="error-box" id="error-box" hidden>
+          <strong>데이터를 불러오지 못했습니다</strong>
+          <span id="error-message"></span>
+          <button class="btn btn-ghost btn-sm" type="button" id="error-retry">다시 시도</button>
+        </div>
+
+        <section class="early-strip" aria-label="얼리버드 잔여석">
+          <div class="early-copy">
+            <span class="kicker">EARLY BIRD</span>
+            <strong><span id="early-remaining">-</span> / 100석 남음</strong>
+          </div>
+          <div class="early-bar"><span id="early-bar-fill" style="width: 0%"></span></div>
+          <div class="early-meta">
+            <span>판매 <strong id="early-sold">-</strong>석</span>
+            <span>전체 주문 <strong id="total-orders">-</strong>건</span>
+          </div>
+        </section>
+
+        <section class="kpi-grid" aria-label="핵심 지표">
+          <article class="kpi-card" style="--accent: var(--purple)">
+            <span class="kpi-label">세션</span>
+            <strong class="kpi-value" id="kpi-sessions">-</strong>
+            <span class="kpi-foot"><span id="kpi-visitors">-</span>명 방문 · 페이지뷰 <span id="kpi-pageviews">-</span></span>
+          </article>
+          <article class="kpi-card" style="--accent: var(--orange)">
+            <span class="kpi-label">예매 건수</span>
+            <strong class="kpi-value" id="kpi-orders">-</strong>
+            <span class="kpi-foot">결제 완료 기준</span>
+          </article>
+          <article class="kpi-card" style="--accent: var(--green)">
+            <span class="kpi-label">매출</span>
+            <strong class="kpi-value" id="kpi-revenue">-</strong>
+            <span class="kpi-foot">객단가 <span id="kpi-aov">-</span></span>
+          </article>
+          <article class="kpi-card" style="--accent: var(--pink)">
+            <span class="kpi-label">전환율</span>
+            <strong class="kpi-value" id="kpi-conversion">-</strong>
+            <span class="kpi-foot">세션 대비 예매</span>
+          </article>
+          <article class="kpi-card" style="--accent: #58d5ff">
+            <span class="kpi-label">버튼 클릭</span>
+            <strong class="kpi-value" id="kpi-clicks">-</strong>
+            <span class="kpi-foot">폼 오류 <span id="kpi-errors">-</span>건</span>
+          </article>
+          <article class="kpi-card" style="--accent: #ffd166">
+            <span class="kpi-label">결제 도달</span>
+            <strong class="kpi-value" id="kpi-checkout">-</strong>
+            <span class="kpi-foot">티켓 선택 <span id="kpi-apply">-</span>명</span>
+          </article>
+        </section>
+
+        <div class="dash-grid">
+          <section class="panel panel-funnel">
+            <div class="panel-head">
+              <div>
+                <span class="kicker">FUNNEL</span>
+                <h2>전환 퍼널</h2>
+              </div>
+              <span class="panel-note">단계별 세션 기준</span>
+            </div>
+            <div class="funnel-insight" id="funnel-insight">데이터를 분석하는 중입니다.</div>
+            <ol class="funnel-list" id="funnel-list"></ol>
+            <div class="funnel-foot">
+              <span>가장 큰 이탈 구간</span>
+              <strong id="funnel-worst">-</strong>
+            </div>
+          </section>
+
+          <section class="panel panel-insights">
+            <div class="panel-head">
+              <div>
+                <span class="kicker">INSIGHTS</span>
+                <h2>자동 인사이트</h2>
+              </div>
+            </div>
+            <ul class="insight-list" id="insights-list"></ul>
+          </section>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="kicker">TREND</span>
+              <h2>일별 세션 · 예매</h2>
+            </div>
+            <div class="chart-legend">
+              <span><i style="background: var(--purple)"></i>세션</span>
+              <span><i style="background: var(--orange)"></i>예매</span>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart"></div>
+        </section>
+
+        <div class="dash-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="kicker">CLICKS</span>
+                <h2>버튼 클릭 순위</h2>
+              </div>
+              <span class="panel-note">상위 12개 · CTR</span>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr><th>버튼</th><th>위치</th><th class="num">클릭</th><th class="num">CTR</th></tr>
+                </thead>
+                <tbody id="buttons-body"></tbody>
+              </table>
+            </div>
+            <p class="empty-note" id="buttons-empty" hidden>아직 클릭 데이터가 없습니다.</p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="kicker">ACQUISITION</span>
+                <h2>유입 소스</h2>
+              </div>
+              <span class="panel-note">세션 · 전환</span>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr><th>소스</th><th class="num">세션</th><th class="num">예매</th><th class="num">전환율</th></tr>
+                </thead>
+                <tbody id="sources-body"></tbody>
+              </table>
+            </div>
+            <p class="empty-note" id="sources-empty" hidden>아직 유입 데이터가 없습니다.</p>
+            <div class="device-block">
+              <span class="mini-label">디바이스</span>
+              <div class="device-list" id="devices-list"></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="dash-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="kicker">PRODUCT</span>
+                <h2>티켓 구성</h2>
+              </div>
+              <span class="panel-note">매출 비중</span>
+            </div>
+            <div class="ticket-mix" id="ticket-mix"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="kicker">RECENT</span>
+                <h2>최근 예매</h2>
+              </div>
+              <span class="panel-note">개인정보 마스킹</span>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table orders-table">
+                <thead>
+                  <tr><th>주문</th><th>예매자</th><th>티켓</th><th class="num">금액</th><th class="num">시각</th></tr>
+                </thead>
+                <tbody id="orders-body"></tbody>
+              </table>
+            </div>
+            <p class="empty-note" id="orders-empty" hidden>아직 예매 내역이 없습니다.</p>
+          </section>
+        </div>
+
+        <footer class="dash-footer">
+          <p>PNU HALLOWEEN NIGHT 2026 · 부산대학교 총학생회</p>
+          <p>본 대시보드는 그로스해킹 데모이며, 모든 수치는 Supabase에서 실시간 집계됩니다.</p>
+          <a href="index.html">랜딩 페이지로</a>
+        </footer>
+      </main>
+    </div>
+
+    <script type="module" src="assets/js/dashboard.js"></script>
+  </body>
+</html>
